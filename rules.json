@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "id": 1,
+      "priority": 1,
+      "action": { "type": "block" },
+      "condition": {
+        "regexFilter": ".*doubleclick\\.net.*|.*google-analytics\\.com.*|.*facebook\\.com/tr.*",
+        "resourceTypes": ["script", "image", "xmlhttprequest"]
+      }
+    }
+  ]
+}
