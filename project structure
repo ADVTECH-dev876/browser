@@ -1,0 +1,9 @@
+privacy-shield-browser/
+├── main.js                 # Electron main process (browser core)
+├── preload.js              # Secure preload script
+├── package.json
+├── privacy-rules.json      # Ad/tracker blocking rules
+├── ui/
+│   ├── index.html          # Browser UI
+│   └── renderer.js         # UI logic
+└── search-proxy.js         # Encrypted search proxy
