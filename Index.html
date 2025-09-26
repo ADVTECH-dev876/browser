@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Browser Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .browser-container {
+            width: 900px;
+            height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Browser Title Bar */
+        .browser-title-bar {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .browser-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .browser-title i {
+            font-size: 18px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .window-btn {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 10px;
+        }
+
+        .close { background: #ff5f57; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #28c940; }
+
+        /* Navigation Bar */
+        .nav-bar {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #e9ecef;
+        }
+
+        .address-bar {
+            flex: 1;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .address-bar i {
+            color: #6c757d;
+        }
+
+        .address-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            padding: 4px 0;
+        }
+
+        .go-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 6px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .go-btn:hover {
+            background: #3a56e4;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            background: #f1f3f5;
+            padding: 8px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            background: white;
+            border-radius: 6px 6px 0 0;
+            padding: 8px 24px 10px;
+            margin-right: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #e0e0e0;
+            border-bottom: none;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: white;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .tab:not(.active):hover {
+            background: #e9ecef;
+        }
+
+        .tab i {
+            font-size: 14px;
+        }
+
+        .new-tab-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            background: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .website-content {
+            width: 100%;
+            height: 100%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: white;
+            overflow: auto;
+        }
+
+        .website-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .website-content p {
+            font-size: 1.2rem;
+            color: #6c757d;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .website-content img {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .website-content .btn {
+            margin-top: 20px;
+            padding: 10px 24px;
+            background: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .website-content .btn:hover {
+            background: #3a56e4;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 950px) {
+            .browser-container {
+                width: 95vw;
+                height: 85vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="browser-container">
+        <!-- Browser Title Bar -->
+        <div class="browser-title-bar">
+            <div class="browser-title">
+                <i class="fas fa-globe-americas"></i>
+                <span>Browser Interface</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-btn close"><i class="fas fa-times"></i></div>
+                <div class="window-btn minimize"><i class="fas fa-minus"></i></div>
+                <div class="window-btn maximize"><i class="fas fa-square"></i></div>
+            </div>
+        </div>
+        
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <div class="nav-btn"><i class="fas fa-arrow-left"></i></div>
+            <div class="nav-btn"><i class="fas fa-arrow-right"></i></div>
+            <div class="nav-btn"><i class="fas fa-redo"></i></div>
+            <div class="address-bar">
+                <i class="fas fa-lock"></i>
+                <input type="text" class="address-input" id="address-input" value="https://example.com">
+                <button class="go-btn" id="go-btn">Go</button>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tab active" data-url="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="tab" data-url="about">
+                <i class="fas fa-info-circle"></i>
+                <span>About</span>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="tab" data-url="contact">
+                <i class="fas fa-envelope"></i>
+                <span>Contact</span>
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="new-tab-btn">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="website-content" id="home-content">
+                <h1>Welcome to Our Website</h1>
+                <p>This is a modern browser interface created with HTML, CSS, and JavaScript. You can navigate between different pages using the tabs above.</p>
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Modern Design">
+                <button class="btn">Learn More</button>
+            </div>
+            
+            <div class="website-content" id="about-content" style="display: none;">
+                <h1>About Us</h1>
+                <p>We are a team of passionate developers creating beautiful and functional web interfaces. Our mission is to make browsing the web a delightful experience.</p>
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Team">
+                <button class="btn">Our Team</button>
+            </div>
+            
+            <div class="website-content" id="contact-content" style="display: none;">
+                <h1>Contact Us</h1>
+                <p>Have questions or feedback? We'd love to hear from you! Reach out to us through any of the channels below.</p>
+                <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Contact">
+                <button class="btn">Send Message</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.website-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all content areas
+                contents.forEach(content => content.style.display = 'none');
+                
+                // Show corresponding content
+                const url = tab.getAttribute('data-url');
+                document.getElementById(`${url}-content`).style.display = 'flex';
+                
+                // Update address bar
+                document.getElementById('address-input').value = `https://example.com/${url}`;
+            });
+        });
+        
+        // Close tab functionality
+        tabs.forEach(tab => {
+            const closeBtn = tab.querySelector('.fa-times');
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent tab activation
+                
+                if (tabs.length <= 1) {
+                    alert('You must have at least one tab open!');
+                    return;
+                }
+                
+                // If closing active tab, activate the next one
+                const isActive = tab.classList.contains('active');
+                const tabIndex = Array.from(tabs).indexOf(tab);
+                
+                tab.remove();
+                
+                if (isActive) {
+                    const nextTab = tabs[Math.min(tabIndex, tabs.length - 1)];
+                    if (nextTab) {
+                        nextTab.click();
+                    }
+                }
+            });
+        });
+        
+        // New tab button
+        document.querySelector('.new-tab-btn').addEventListener('click', () => {
+            const newTab = document.createElement('div');
+            newTab.className = 'tab';
+            newTab.setAttribute('data-url', 'home');
+            newTab.innerHTML = `
+                <i class="fas fa-home"></i>
+                <span>New Tab</span>
+                <i class="fas fa-times"></i>
+            `;
+            
+            // Insert before new tab button
+            document.querySelector('.new-tab-btn').before(newTab);
+            
+            // Add event listeners to new tab
+            newTab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                newTab.classList.add('active');
+                contents.forEach(content => content.style.display = 'none');
+                document.getElementById('home-content').style.display = 'flex';
+                document.getElementById('address-input').value = 'https://example.com';
+            });
+            
+            // Add close functionality
+            const closeBtn = newTab.querySelector('.fa-times');
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (document.querySelectorAll('.tab').length <= 1) {
+                    alert('You must have at least one tab open!');
+                    return;
+                }
+                newTab.remove();
+            });
+            
+            // Activate new tab
+            newTab.click();
+        });
+        
+        // Go button functionality
+        document.getElementById('go-btn').addEventListener('click', () => {
+            const url = document.getElementById('address-input').value;
+            alert(`Navigating to: ${url}\n(This is a simulation)`);
+        });
+        
+        // Address bar enter key
+        document.getElementById('address-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('go-btn').click();
+            }
+        });
+        
+        // Window controls
+        document.querySelector('.close').addEventListener('click', () => {
+            if (confirm('Close the browser?')) {
+                document.querySelector('.browser-container').style.display = 'none';
+                document.body.innerHTML = '<div style="text-align:center; padding:50px; color:white; font-size:24px;">Browser closed</div>';
+            }
+        });
+        
+        document.querySelector('.minimize').addEventListener('click', () => {
+            alert('Minimize functionality would be implemented in a real browser');
+        });
+        
+        document.querySelector('.maximize').addEventListener('click', () => {
+            alert('Maximize functionality would be implemented in a real browser');
+        });
+    </script>
+</body>
+</html>
