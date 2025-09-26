@@ -1,0 +1,23 @@
+// Simple search proxy (in production: deploy as HTTPS microservice)
+const axios = require('axios');
+
+async function anonymizeSearch(query, backend = 'https://duckduckgo.com') {
+  // Strip metadata, add padding
+  const paddedQuery = query + Array(10).fill('x').join('');
+  try {
+    const response = await axios.get(`${backend}/html`, {
+      params: { q: paddedQuery },
+      headers: {
+        'User-Agent': 'PrivacyShield/1.0',
+        'Accept': 'text/html',
+        'DNT': '1'
+      },
+      timeout: 5000
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Search proxy failed');
+  }
+}
+
+module.exports = { anonymizeSearch };
